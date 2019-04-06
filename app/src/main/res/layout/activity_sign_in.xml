@@ -4,85 +4,97 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center_vertical"
-    android:padding="8dp"
+    android:orientation="vertical"
     tools:context=".Activities.SignInActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Mobile Number"
-        android:textSize="15sp" />
-
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="8dp"
-        card_view:cardCornerRadius="4dp">
-
-        <EditText
-            android:id="@+id/phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone" />
-    </android.support.v7.widget.CardView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Verification Code"
-        android:textSize="15sp" />
-
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="8dp"
-        card_view:cardCornerRadius="4dp">
-
-        <EditText
-            android:id="@+id/verification_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-    </android.support.v7.widget.CardView>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp">
+        android:layout_margin="@dimen/padding_half">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Mobile Number"
+                android:textSize="@dimen/typography_subheading" />
+
+
+            <EditText
+                android:id="@+id/phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:padding="8dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Verification Code"
+                android:textSize="@dimen/typography_subheading" />
+
+            <EditText
+                android:id="@+id/verification_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:padding="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_margin="@dimen/padding_half"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
                 <Button
                     android:id="@+id/send_code"
-                    android:background="@color/colorPrimary"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="send code"
-                    android:onClick="sendCode"/>
-        </LinearLayout>
+                    android:background="@color/colorPrimary"
+                    android:onClick="sendCode"
+                    android:text="send code" />
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/card_view_resend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    card_view:cardBackgroundColor="@color/colorPrimary"
+                    card_view:cardCornerRadius="4dp">
+
+                    <Button
+                        android:id="@+id/resend_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimary"
+                        android:onClick="resendCode"
+                        android:text="resend code" />
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/card_view_resend"
+                android:id="@+id/card_view_signup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -90,32 +102,15 @@
                 card_view:cardCornerRadius="4dp">
 
                 <Button
-                    android:id="@+id/resend_code"
-                    android:background="@color/colorPrimary"
+                    android:id="@+id/verify_code"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="resend code"
-                    android:onClick="resendCode"/>
+                    android:background="@color/colorPrimary"
+                    android:onClick="verifyCode"
+                    android:padding="8dp"
+                    android:text="Verify code" />
             </android.support.v7.widget.CardView>
         </LinearLayout>
-
-        <android.support.v7.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/card_view_signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            card_view:cardBackgroundColor="@color/colorPrimary"
-            card_view:cardCornerRadius="4dp">
-
-            <Button
-                android:id="@+id/verify_code"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/colorPrimary"
-                android:padding="8dp"
-                android:text="Verify code"
-                android:onClick="verifyCode"/>
-        </android.support.v7.widget.CardView>
-    </LinearLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

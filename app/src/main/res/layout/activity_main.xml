@@ -12,7 +12,7 @@
         android:id="@+id/data_capture_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
         <ScrollView
             android:layout_weight="1"
@@ -48,42 +48,7 @@
                             android:textSize="@dimen/typography_subheading"/>
 
                     </android.support.design.widget.TextInputLayout>
-
                 </LinearLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_default">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/domicile_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/state_of_domicile"
-                        android:inputType="textPersonName|textCapWords"
-                        android:textSize="@dimen/typography_subheading"
-                        android:layout_marginEnd="@dimen/padding_half"
-                        android:layout_marginRight="@dimen/padding_half"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_default">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/constituency_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/constituency"
-                        android:textSize="@dimen/typography_subheading"
-                        android:inputType="textPersonName|textCapWords"
-                        android:layout_marginEnd="@dimen/padding_half"
-                        android:layout_marginRight="@dimen/padding_half"/>
-
-                </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -118,6 +83,54 @@
                         android:layout_marginEnd="@dimen/padding_half"/>
 
                 </android.support.design.widget.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/padding_default">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/state_of_domicile"/>
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/state_spinner">
+                </Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/padding_default">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city"/>
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/city_spinner">
+                    </Spinner>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/padding_default">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/constituency"/>
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/constituency_spinner">
+                    </Spinner>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
         <Button

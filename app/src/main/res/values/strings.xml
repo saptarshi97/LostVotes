@@ -4,6 +4,7 @@
     <string name="state_of_domicile">State Of Domicile:</string>
     <string name="constituency">Constituency:</string>
     <string name="voter_id">Voter ID number:</string>
+    <string name="city">City</string>
     <string name="aadhar_number">Aadhar Number:</string>
     <string name="submit">Submit</string>
     <string name="placeholder_text">Some Placeholder Text</string>

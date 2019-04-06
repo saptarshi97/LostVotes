@@ -1,13 +1,17 @@
 package in.mahe.lostvotes.Activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,21 +39,14 @@ public class SignInActivity extends AppCompatActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallbacks;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private FirebaseAuth fbAuth;
+    private Dialog dialog;
+    private boolean isNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        phoneNumber=findViewById(R.id.phone_number);
-        vCode=findViewById(R.id.verification_code);
-
-        sendButton=findViewById(R.id.send_code);
-        resendButton=findViewById(R.id.resend_code);
-        verCodeButton=findViewById(R.id.verify_code);
-
-        verCodeButton.setEnabled(false);
-        resendButton.setEnabled(false);
-        fbAuth=FirebaseAuth.getInstance();
+        initViews();
     }
 
     public void sendCode(View view){
@@ -57,7 +54,7 @@ public class SignInActivity extends AppCompatActivity {
         String pNumber=phoneNumber.getText().toString();
         Log.d(TAG, "sendCode: "+pNumber);
         setUpVerificatonCallbacks();
-
+        setDialog("Requesting OTP");
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 pNumber,        // Phone number to verify
                 60,                 // Timeout duration
@@ -93,6 +90,9 @@ public class SignInActivity extends AppCompatActivity {
                         } else if (e instanceof FirebaseTooManyRequestsException) {
                             // SMS quota exceeded
                             Log.d(TAG, "SMS Quota exceeded.");
+                            if(dialog.isShowing()&& dialog!=null)
+                                dialog.dismiss();
+                            showAlert(false, R.drawable.ic_sad, "SMS Quota exceeded");
                         }
                     }
 
@@ -106,6 +106,9 @@ public class SignInActivity extends AppCompatActivity {
                         verCodeButton.setEnabled(true);
                         sendButton.setEnabled(false);
                         resendButton.setEnabled(true);
+
+                        if(dialog.isShowing()&& dialog!=null)
+                            dialog.dismiss();
                     }
                 };
     }
@@ -113,7 +116,7 @@ public class SignInActivity extends AppCompatActivity {
     public void resendCode(View view){
         String phoneNumber=this.phoneNumber.getText().toString();
         setUpVerificatonCallbacks();
-
+        setDialog("Requesting OTP");
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,        // Phone number to verify
                 60,                 // Timeout duration
@@ -128,6 +131,7 @@ public class SignInActivity extends AppCompatActivity {
         String code=vCode.getText().toString().trim();
         PhoneAuthCredential credential =
                 PhoneAuthProvider.getCredential(phoneVerificationID, code);
+        setDialog("Verifying OTP");
         signInWithPhoneAuthCredential(credential);
     }
 
@@ -140,16 +144,58 @@ public class SignInActivity extends AppCompatActivity {
                             resendButton.setEnabled(false);
                             verCodeButton.setEnabled(false);
                             FirebaseUser user = task.getResult().getUser();
-                            boolean isNew=task.getResult().getAdditionalUserInfo().isNewUser();
-                            startActivity(new Intent(SignInActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).putExtra("isNewUser",isNew));
+                            isNew=task.getResult().getAdditionalUserInfo().isNewUser();
+                            if(dialog.isShowing() && dialog!=null)
+                                dialog.dismiss();
+                            showAlert(true,R.drawable.ic_happy, "OTP Verified !");
 
                         } else {
                             if (task.getException() instanceof
                                     FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
+                                if(dialog.isShowing()&& dialog!=null)
+                                    dialog.dismiss();
+                                showAlert(false,R.drawable.ic_sad,"Incorrect OTP !");
                             }
                         }
                     }
                 });
+    }
+
+    private void initViews(){
+        phoneNumber=findViewById(R.id.phone_number);
+        vCode=findViewById(R.id.verification_code);
+
+        sendButton=findViewById(R.id.send_code);
+        resendButton=findViewById(R.id.resend_code);
+        verCodeButton=findViewById(R.id.verify_code);
+
+        verCodeButton.setEnabled(false);
+        resendButton.setEnabled(false);
+        fbAuth=FirebaseAuth.getInstance();
+
+    }
+    private void setDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.item_progress,null);
+        builder.setView(view);
+        TextView t=view.findViewById(R.id.loading_msg);
+        t.setText(message);
+        dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showAlert(final boolean moveForward, int icon, String message){
+        new AlertDialog.Builder(this)
+                .setTitle("Alert")
+                .setIcon(icon)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(moveForward)
+                            startActivity(new Intent(SignInActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK).putExtra("isNewUser",isNew));
+                    }
+                }).show();
     }
 }
