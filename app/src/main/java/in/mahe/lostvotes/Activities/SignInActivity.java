@@ -3,6 +3,7 @@ package in.mahe.lostvotes.Activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,12 +44,17 @@ public class SignInActivity extends AppCompatActivity {
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private FirebaseAuth fbAuth;
     private Dialog dialog;
+    private Typeface typeface;
+    private FirebaseFirestore db;
+    private String currentUserID;
+    private TextView mobileTextView, verTextView;
     private boolean isNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        db=FirebaseFirestore.getInstance();
         initViews();
     }
 
@@ -144,7 +153,8 @@ public class SignInActivity extends AppCompatActivity {
                             resendButton.setEnabled(false);
                             verCodeButton.setEnabled(false);
                             FirebaseUser user = task.getResult().getUser();
-                            isNew=task.getResult().getAdditionalUserInfo().isNewUser();
+                            //isNew=task.getResult().getAdditionalUserInfo().isNewUser();
+                            currentUserID = user.getUid();
                             if(dialog.isShowing() && dialog!=null)
                                 dialog.dismiss();
                             showAlert(true,R.drawable.ic_happy, "OTP Verified !");
@@ -171,6 +181,11 @@ public class SignInActivity extends AppCompatActivity {
 
         verCodeButton.setEnabled(false);
         resendButton.setEnabled(false);
+        typeface=Typeface.createFromAsset(getAssets(), "fonts/Gilroy-Light.otf");
+        mobileTextView=findViewById(R.id.mobile_tv);
+        verTextView=findViewById(R.id.ver_tv);
+        mobileTextView.setTypeface(typeface);
+        verTextView.setTypeface(typeface);
         fbAuth=FirebaseAuth.getInstance();
 
     }
@@ -179,6 +194,7 @@ public class SignInActivity extends AppCompatActivity {
         View view = getLayoutInflater().inflate(R.layout.item_progress,null);
         builder.setView(view);
         TextView t=view.findViewById(R.id.loading_msg);
+        t.setTypeface(typeface);
         t.setText(message);
         dialog = builder.create();
         dialog.setCancelable(false);
@@ -194,8 +210,30 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(moveForward)
-                            startActivity(new Intent(SignInActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK).putExtra("isNewUser",isNew));
+                            checkAndStart(currentUserID);
                     }
                 }).show();
     }
+
+    private void checkAndStart(String uid) {
+        DocumentReference docRef = db.collection("Users").document(uid); //Creating a document reference for the required doc in a collection
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() { //getting data using the docref
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        startActivity(new Intent(SignInActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK).putExtra("isNewUser",false));
+                        Log.d("MainActivity", "onComplete: ");
+                    } else {
+                        startActivity(new Intent(SignInActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK).putExtra("isNewUser",true));
+                        Log.d("MainActivity", "No such document");
+                    }
+                } else {
+                    Log.d("MainActivity", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
 }

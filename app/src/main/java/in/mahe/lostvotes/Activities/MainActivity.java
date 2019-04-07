@@ -2,6 +2,7 @@ package in.mahe.lostvotes.Activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button submit,edit,vote;
     private Spinner dSpinner,conSpinner,citySpinner;
     private boolean returnVal;
+    private Typeface typeface;
     FirebaseFirestore db;
 
 
@@ -55,14 +57,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         conSpinner.setOnItemSelectedListener(this);
         citySpinner.setOnItemSelectedListener(this);
         db=FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();  // Gettin the current user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();  // Getting the current user
         try {
-            currentUserID = user.getUid();      //getting the unique firebase generated user ID for logged-in user
+            currentUserID = user.getUid();//getting the unique firebase generated user ID for logged-in user
         }catch (Exception e){
             Log.d("MainActivity", "onCreate: getUid returned null");
         }
-        boolean isNewUser=getIntent().getBooleanExtra("isNewUser",false) || !detailsExist(currentUserID);
-        Log.d("MainActivity", "onCreate: "+isNewUser);
+
+        boolean isNewUser=getIntent().getBooleanExtra("isNewUser",false);
         if(isNewUser) {
             setDataCapture();
         }
@@ -87,28 +89,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 proceedToVote();
             }
         });
-    }
-
-    private boolean detailsExist(String uid){
-        returnVal=false;
-        DocumentReference docRef = db.collection("Users").document(uid); //Creating a document reference for the required doc in a collection
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() { //getting data using the docref
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        returnVal=true;
-                    } else {
-                        returnVal=false;
-                        Log.d("MainActivity", "No such document");
-                    }
-                } else {
-                    Log.d("MainActivity", "get failed with ", task.getException());
-                }
-            }
-        });
-        return returnVal;
     }
 
     private void setDataCapture(){
@@ -208,6 +188,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         constituencyTextView.setText(document.get("constituency").toString());
                         aadharTextView.setText(document.get("aadharID").toString());
                         voterIDTextView.setText(document.get("voterID").toString());
+
+                        nameTextView.setTypeface(typeface);
+                        domicileTextView.setTypeface(typeface);
+                        constituencyTextView.setTypeface(typeface);
+                        aadharTextView.setTypeface(typeface);
+                        voterIDTextView.setTypeface(typeface);
 
                         dataShow.setVisibility(View.VISIBLE);
                     } else {
@@ -321,5 +307,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         citySpinner=findViewById(R.id.city_spinner);
         conSpinner.setEnabled(false);
         citySpinner.setEnabled(false);
+        typeface=Typeface.createFromAsset(getAssets(), "fonts/Gilroy-Light.otf");
     }
 }
