@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setDataCapture();
     }
     private void proceedToVote(){
-        startActivity(new Intent(this, VoteAuthenticateActivity.class));
+        startActivity(new Intent(this, FaceDetectActivity.class));
     }
 
     private void loadAndShowData(){
