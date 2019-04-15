@@ -3,7 +3,7 @@
     package="in.mahe.lostvotes">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -24,7 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.FaceDetectActivity"></activity>
+        <activity android:name=".Activities.FaceDetectActivity" />
+        <activity android:name=".Activities.SelectingParty"></activity>
     </application>
 
 </manifest>
