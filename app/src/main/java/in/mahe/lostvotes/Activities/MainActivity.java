@@ -1,5 +1,6 @@
 package in.mahe.lostvotes.Activities;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,13 +41,14 @@ import in.mahe.lostvotes.R;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private LinearLayout dataShow,dataCapture;
     private EditText nameEditText, voterIDEditText, aadharEditText;
-    private String name, domicile, city, constituency, voterID, aadhar, currentUserID;
+    private String name, domicile, city, constituency, voterID, aadhar, currentUserID, voteFlag;
     private TextView nameTextView, domicileTextView, constituencyTextView, voterIDTextView, aadharTextView;
     private Button submit,edit,vote;
     private Spinner dSpinner,conSpinner,citySpinner;
     private boolean returnVal;
     public static String PREF_NAME="shared values";
     private Typeface typeface;
+    private Dialog dialog;
     FirebaseFirestore db;
 
 
@@ -142,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             user.put("constituency", constituency);
             user.put("voterID", voterID);
             user.put("aadharID", aadhar);
+            user.put("voted",0);
 
             SharedPreferences.Editor editor=getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
             editor.putString("name",name);
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             editor.putString("constituency", constituency);
             editor.putString("voterID", voterID);
             editor.putString("aadharID", aadhar);
+            editor.putString("voteFlag","0");
             editor.apply();
 
             db.collection("Users") //References the collection in the Db
@@ -178,13 +182,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dataShow.setVisibility(View.GONE);
         setDataCapture();
     }
+
     private void proceedToVote(){
-        startActivity(new Intent(this, SelectingParty.class));
+        if(!voteFlag.isEmpty() && voteFlag.equals("0"))
+            startActivity(new Intent(this, SelectingParty.class));
+        else
+            showAlert("You have already voted. Thank you!\nIf you haven't voted please contact support@SomeGovSite.in");
     }
 
     private void loadAndShowData(){
         dataCapture.setVisibility(View.GONE);
-
+        setDialog("Loading saved data...");
         //Call to firebase and data setting
         DocumentReference docRef = db.collection("Users").document(currentUserID); //Creating a document reference for the required doc in a collection
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() { //getting data using the docref
@@ -199,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         constituencyTextView.setText(document.get("constituency").toString());
                         aadharTextView.setText(document.get("aadharID").toString());
                         voterIDTextView.setText(document.get("voterID").toString());
+                        voteFlag=document.get("voted").toString();
 
                         SharedPreferences.Editor editor=getSharedPreferences(PREF_NAME, MODE_PRIVATE).edit();
                         editor.putString("name",document.get("name").toString());
@@ -207,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         editor.putString("constituency", document.get("constituency").toString());
                         editor.putString("voterID", document.get("voterID").toString());
                         editor.putString("aadharID", document.get("aadharID").toString());
+                        editor.putString("voteFlag",voteFlag);
                         editor.apply();
 
                         nameTextView.setTypeface(typeface);
@@ -215,8 +225,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         aadharTextView.setTypeface(typeface);
                         voterIDTextView.setTypeface(typeface);
 
-
-
+                        if(dialog.isShowing()&& dialog!=null)
+                            dialog.dismiss();
                         dataShow.setVisibility(View.VISIBLE);
                     } else {
                         Log.d("MainActivity", "No such document");
@@ -238,6 +248,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 }).show();
+    }
+
+    private void setDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.item_progress,null);
+        builder.setView(view);
+        TextView t=view.findViewById(R.id.loading_msg);
+        t.setTypeface(typeface);
+        t.setText(message);
+        dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     @Override
@@ -311,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void initViews(){
+        voteFlag="0";
         dataShow=findViewById(R.id.data_show_layout);
         dataCapture=findViewById(R.id.data_capture_layout);
         nameEditText=findViewById(R.id.name_edit_text);

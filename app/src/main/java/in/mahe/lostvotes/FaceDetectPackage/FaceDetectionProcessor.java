@@ -13,9 +13,9 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import java.io.IOException;
 import java.util.List;
 
-import in.mahe.lostvotes.Utilities.FrameMetadata;
-import in.mahe.lostvotes.Utilities.GraphicOverlay;
-import in.mahe.lostvotes.Utilities.VisionProcessorBase;
+import in.mahe.lostvotes.FaceUtilities.FrameMetadata;
+import in.mahe.lostvotes.FaceUtilities.GraphicOverlay;
+import in.mahe.lostvotes.FaceUtilities.VisionProcessorBase;
 
 /** Face Detector Demo. */
 public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVisionFace>> {

@@ -1,4 +1,4 @@
-package in.mahe.lostvotes.Utilities;
+package in.mahe.lostvotes.FaceUtilities;
 
 /** Describing a frame info. */
 public class FrameMetadata {

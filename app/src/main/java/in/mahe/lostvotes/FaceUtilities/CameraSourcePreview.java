@@ -1,4 +1,4 @@
-package in.mahe.lostvotes.Utilities;
+package in.mahe.lostvotes.FaceUtilities;
 
 import android.content.Context;
 import android.content.res.Configuration;

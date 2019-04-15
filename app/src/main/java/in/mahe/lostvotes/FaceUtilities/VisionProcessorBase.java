@@ -1,4 +1,4 @@
-package in.mahe.lostvotes.Utilities;
+package in.mahe.lostvotes.FaceUtilities;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.annotation.NonNull;

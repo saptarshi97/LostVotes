@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import com.google.android.gms.vision.CameraSource;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 
-import in.mahe.lostvotes.Utilities.GraphicOverlay;
+import in.mahe.lostvotes.FaceUtilities.GraphicOverlay;
 
 
 /**
