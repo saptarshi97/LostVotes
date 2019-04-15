@@ -1,5 +1,8 @@
 package in.mahe.lostvotes.FaceDetectPackage;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,13 +23,16 @@ import in.mahe.lostvotes.FaceUtilities.GraphicOverlay;
 import in.mahe.lostvotes.FaceUtilities.VisionProcessorBase;
 
 public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVisionFace>> {
-    int count=0;
-
+    public int count=0;
+    private Context obj;
+    private Intent intent;
     private static final String TAG = "FaceDetectionProcessor";
 
     private final FirebaseVisionFaceDetector detector;
 
-    public FaceDetectionProcessor() {
+    public FaceDetectionProcessor(Context obj, Intent intent) {
+        this.obj=obj;
+        this.intent=intent;
         FirebaseVisionFaceDetectorOptions options =
                 new FirebaseVisionFaceDetectorOptions.Builder()
                         .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
@@ -63,13 +69,8 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
             Log.d(TAG, "onSuccess: Face detected and count= "+count);
             count++;
-            if(count>=15) {
-                try {
-                    detector.close();
-                }catch (Exception e){
-                 e.printStackTrace();
-                }
-                new FaceDetectActivity().alertAndMove();
+            if(count>=15){
+                obj.startActivity(intent);
             }
         }
     }

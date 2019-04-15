@@ -67,7 +67,9 @@ public class FaceDetectActivity extends AppCompatActivity implements ActivityCom
             switch (model) {
                 case FACE_DETECTION:
                     Log.i(TAG, "Using Face Detector Processor");
-                    cameraSource.setMachineLearningFrameProcessor(new FaceDetectionProcessor());
+                    Intent i=new Intent( this,SelectingParty.class);
+
+                    cameraSource.setMachineLearningFrameProcessor(new FaceDetectionProcessor(this,i));
                     break;
                 default:
                     Log.e(TAG, "Unknown model: " + model);
@@ -189,7 +191,7 @@ public class FaceDetectActivity extends AppCompatActivity implements ActivityCom
         return false;
     }
     public void alertAndMove(){
-        Intent i=new Intent(FaceDetectActivity.this,SelectingParty.class);
-        startActivity(i);
+//        Intent i=new Intent(FaceDetectActivity.this,SelectingParty.class);
+  //      startActivity(i);
     }
 }
