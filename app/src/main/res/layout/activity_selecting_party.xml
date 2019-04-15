@@ -5,11 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     tools:context=".Activities.SelectingParty">
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/party_list">
     </ListView>
+    <Button
+        android:id="@+id/submit_vote"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Submit"/>
 
 </LinearLayout>
