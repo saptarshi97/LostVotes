@@ -13,12 +13,14 @@ import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
 import java.io.IOException;
 import java.util.List;
 
+import in.mahe.lostvotes.Activities.FaceDetectActivity;
+import in.mahe.lostvotes.Activities.PermissionAcquisitionActivity;
 import in.mahe.lostvotes.FaceUtilities.FrameMetadata;
 import in.mahe.lostvotes.FaceUtilities.GraphicOverlay;
 import in.mahe.lostvotes.FaceUtilities.VisionProcessorBase;
 
-/** Face Detector Demo. */
 public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVisionFace>> {
+    int count=0;
 
     private static final String TAG = "FaceDetectionProcessor";
 
@@ -59,6 +61,16 @@ public class FaceDetectionProcessor extends VisionProcessorBase<List<FirebaseVis
             FaceGraphic faceGraphic = new FaceGraphic(graphicOverlay);
             graphicOverlay.add(faceGraphic);
             faceGraphic.updateFace(face, frameMetadata.getCameraFacing());
+            Log.d(TAG, "onSuccess: Face detected and count= "+count);
+            count++;
+            if(count>=15) {
+                try {
+                    detector.close();
+                }catch (Exception e){
+                 e.printStackTrace();
+                }
+                new FaceDetectActivity().alertAndMove();
+            }
         }
     }
 

@@ -24,8 +24,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.MainActivity" />
-        <activity android:name=".Activities.FaceDetectActivity" />
-        <activity android:name=".Activities.SelectingParty"></activity>
+        <activity android:name=".Activities.SelectingParty" />
+        <activity android:name=".Activities.PermissionAcquisitionActivity" />
+        <activity android:name=".Activities.FaceDetectActivity"></activity>
     </application>
 
 </manifest>

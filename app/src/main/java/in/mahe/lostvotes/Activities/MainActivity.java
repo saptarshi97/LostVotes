@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void proceedToVote(){
         if(!voteFlag.isEmpty() && voteFlag.equals("0"))
-            startActivity(new Intent(this, SelectingParty.class));
+            startActivity(new Intent(this, PermissionAcquisitionActivity.class));
         else
             showAlert("You have already voted. Thank you!\nIf you haven't voted please contact support@SomeGovSite.in");
     }
