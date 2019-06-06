@@ -47,7 +47,7 @@ public abstract class VisionProcessorBase<T> implements VisionImageProcessor {
                 FirebaseVisionImage.fromByteBuffer(data, metadata), frameMetadata, graphicOverlay);
     }
 
-    // Bitmap version
+    // Bitmap version Not being used in our project
     @Override
     public void process(Bitmap bitmap, final GraphicOverlay
             graphicOverlay) {

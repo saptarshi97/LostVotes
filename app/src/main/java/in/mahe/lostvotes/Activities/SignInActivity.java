@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
@@ -48,14 +47,18 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String currentUserID;
     private TextView mobileTextView, verTextView;
-    private boolean isNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         db=FirebaseFirestore.getInstance();
-        initViews();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();  // Getting the current user
+        if(user!=null){
+            startActivity(new Intent(SignInActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK).putExtra("isNewUser",false));
+        }else {
+            initViews();
+        }
     }
 
     public void sendCode(View view){
@@ -82,11 +85,6 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void onVerificationCompleted(
                             PhoneAuthCredential credential) {
-
-                        //resendButton.setEnabled(false);
-                        //verCodeButton.setEnabled(false);
-                        //Log.d(TAG, "onVerificationCompleted: ");
-                        //signInWithPhoneAuthCredential(credential);
                     }
 
                     @Override

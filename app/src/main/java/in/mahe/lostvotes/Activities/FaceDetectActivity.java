@@ -68,7 +68,6 @@ public class FaceDetectActivity extends AppCompatActivity implements ActivityCom
                 case FACE_DETECTION:
                     Log.i(TAG, "Using Face Detector Processor");
                     Intent i=new Intent( this,SelectingParty.class);
-
                     cameraSource.setMachineLearningFrameProcessor(new FaceDetectionProcessor(this,i));
                     break;
                 default:
@@ -189,9 +188,5 @@ public class FaceDetectActivity extends AppCompatActivity implements ActivityCom
         }
         Log.i(TAG, "Permission NOT granted: " + permission);
         return false;
-    }
-    public void alertAndMove(){
-//        Intent i=new Intent(FaceDetectActivity.this,SelectingParty.class);
-  //      startActivity(i);
     }
 }

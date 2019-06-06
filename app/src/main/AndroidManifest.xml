@@ -23,7 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="example.com"
+                    android:scheme="https"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".Activities.SelectingParty" />
         <activity android:name=".Activities.PermissionAcquisitionActivity" />
         <activity android:name=".Activities.FaceDetectActivity"></activity>
