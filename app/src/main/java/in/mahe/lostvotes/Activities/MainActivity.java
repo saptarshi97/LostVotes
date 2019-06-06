@@ -402,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private Uri constructURL() {
-        Uri baseURI=Uri.parse("https://youtube.com/");
+        Uri baseURI=Uri.parse("https://youtube.com");
         Uri APP_URI = baseURI.buildUpon().appendQueryParameter("requestID", "200").
                 appendQueryParameter("extra1", "value").
                 appendQueryParameter("extra2", "value").build();
